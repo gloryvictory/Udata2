@@ -2,5 +2,6 @@
 *.ps1
 PowerShell/*
 conf.py
+cfg.py
 .idea/*
 venv/*
