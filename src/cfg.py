@@ -12,14 +12,16 @@ folder_out_win = 'E:\\TEMP\\info.doc\\'
 folder_out_linux = '/Users/glory/projects/out'
 
 
-# host = 'localhost'
-# schema = 'udataschema'
-# user = 'udatauser'
-# user_password = 'udatauserpassword'
-# database = 'udatadb'
+host = 'localhost'
+schema = 'udataschema'
+user = 'udatauser2'
+user_password = 'udatauser2pwd'
+database = 'udatadb2'
 # postgresql://udatauser:udatauserpassword@localhost:5432/udatadb
 
 csv_delimiter = ';'
+
+csv_fieldnames_in = ['compname','FullName','Length','CreationTime', 'ModifiedTime','AccessTime','Name','Extension','MD5']
 
 # csv_dict = {'COMPNAME': '',
 #             'DISK': '',
