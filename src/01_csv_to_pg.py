@@ -20,18 +20,20 @@
 
 import os  # Load the Library Module
 import os.path
-import sys
-# import time
-from sys import platform as _platform
-# from time import strftime  # Load just the strftime Module from Time
 from datetime import datetime
 import csv
-# import codecs
 import logging
 from itertools import (takewhile, repeat)
+
+#import sys
+# import time
+# from time import strftime  # Load just the strftime Module from Time
 #import codecs
 
+
 # non standard packages
+import peewee
+
 try:
     from tqdm import tqdm
 except Exception as e:
@@ -40,74 +42,19 @@ except Exception as e:
 
 # non standard packages
 try:
-    import peewee
+    from peewee import *
 except Exception as e:
     print("Exception occurred " + str(e))
     print("try: pip install peewee")
 
-import cfg  # some global configurations
+
+from src import cfg  # some global configurations
+from src import gfiletools  # some global configurations
+#from src import models
+from src.models import Udata
 
 
-def get_input_directory_from_cfg():
-    directory_in = str(os.getcwd())
-    if _platform == "linux" or _platform == "linux2" or _platform == "darwin":
-        if os.path.isdir(cfg.folder_in_linux):
-            print('Input directory from a config file: ' + cfg.folder_in_linux)
-            return cfg.folder_in_linux
-        else:
-            print(
-                'Input directories from config wrong: ' + cfg.folder_in_linux + ' Using current directory: ' + directory_in)
-            return directory_in
-    if _platform == "win32" or _platform == "win64":  # Windows or Windows 64-bit
-        if os.path.isdir(cfg.folder_in_win):
-            print('Input directory from a config file: ' + cfg.folder_in_win)
-            return cfg.folder_in_win
-        else:
-            print(
-                'Input directories from config wrong: ' + cfg.folder_in_win + ' Using current directory: ' + directory_in)
-            return directory_in
-    return directory_in
 
-
-def get_input_directory():
-    # get from config
-    directory_in = str(os.getcwd())
-    # if only run the script (1 argument)
-    if len(sys.argv) == 1:  # there is no arguments in command line
-        return get_input_directory_from_cfg()
-
-    if len(sys.argv) == 2:  # there is only one argument in command line
-        directory_in = str(sys.argv[1:][0])
-        if os.path.isdir(directory_in):
-            return directory_in
-        else:
-            return get_input_directory_from_cfg()
-
-    if len(sys.argv) > 2:  # there is only one argument in command line
-        print("Arguments much more than 1! Please use only path as an argument. (Script.py /mnt/some_path) ")
-        print(sys.argv, len(sys.argv))
-        exit(1)
-    return directory_in
-
-
-def get_output_directory():
-    dir_out = str(os.getcwd())
-    # Linux platform
-    if _platform == "linux" or _platform == "linux2" or _platform == "darwin":
-        dir_out = cfg.folder_out_linux
-        print('Output directory from config file: ' + dir_out)
-        if os.path.exists(dir_out) and os.path.isdir(dir_out):
-            return dir_out
-    if _platform == "win32" or _platform == "win64":  # Windows or Windows 64-bit
-        dir_out = cfg.folder_win_out
-        print('Output directory from config file' + dir_out)
-        if os.path.exists(dir_out) and os.path.isdir(dir_out):
-            return dir_out
-    else:
-        print(
-            'Output directories from config wrong: ' + cfg.folder_out_win + ' or ' + cfg.folder_out_linux + ' Using current directory: ' + dir_out)
-    print('Using Output directory: ' + dir_out)
-    return dir_out
 
 
 def get_extension(filename=''):
@@ -157,7 +104,7 @@ def file_rows_count(filename):
 
 def csv_file_out_create():
     csv_dict = cfg.csv_dict
-    file_csv = str(os.path.join(get_output_directory(), cfg.file_csv))  # from cfg.file
+    file_csv = str(os.path.join(gfiletools.get_output_directory(), cfg.file_csv))  # from cfg.file
     # Если выходной CSV файл существует - удаляем его
     if os.path.isfile(file_csv):
         os.remove(file_csv)
@@ -186,63 +133,46 @@ def get_list_csv_dir(dir_input=''):
 
 
 '''
-    Do many csv files and make one csv file big
+    PG Create tables
 '''
-
-
-def csv_file_to_pg(filename_with_path=''):
-    csv_dict = cfg.csv_dict
-    dir_out = get_output_directory()
-    file_csv = str(os.path.join(dir_out, cfg.file_csv))
-
-# db = SqliteDatabase('zsniigg.db')
-
+def pg_create_tables():
+    # db = SqliteDatabase('zsniigg.db')
     db = PostgresqlDatabase(cfg.database, host=cfg.host, port=None, user=cfg.user, password=cfg.user_password,
                             autocommit=True, autorollback=True)  # )
-
     # db = PostgresqlDatabase(cfg.database, user=cfg.user, password=cfg.user_password)   # host=cfg.host )
     # db.autorollback = True
-
-    # Model for our entry table
-    class Udata(Model):
-        compname = CharField(max_length=250, default="")
-        disk = CharField(max_length=1, default="")
-        fullname = TextField(default="") #CharField(max_length=250, default="")
-        size = BigIntegerField(default=0) # Length - in csv;
-        ctime = DateTimeField(default=datetime.now)
-        mtime = DateTimeField(default=datetime.now)
-        atime = DateTimeField(default=datetime.now)
-        filename_long = CharField(max_length=250, default="") # name in CSV File
-        ext_long = CharField(max_length=250, default="")
-        ext_shot = CharField(max_length=250, default="") # extension in CSV File
-        date = CharField(max_length=10, default="")
-        year = IntegerField()
-        month = IntegerField()
-        fio = CharField(max_length=250, default="")
-        otdel = CharField(max_length=250, default="")
-        textfull = TextField(default="")
-        textless = TextField(default="")
-        MD5FULLNAME = CharField(max_length=50, default="")
-        MD5FILE = CharField(max_length=50, default="")
-        lastupdate = DateTimeField(default=datetime.now)
-
-        class Meta:
-            database = db
-            # indexes = (
-            #     # create a unique on ...
-            #     (('compname'), True),)
     db.connect()
-    #db.drop_tables([Udata])
-    db.create_tables([Udata], safe=True)
+    try:
+        db.create_tables([Udata], safe=True)
+    except peewee.InternalError as px:
+        print(str(px))
+
+    # db.drop_tables([Udata])
+
+
+
+'''
+    Do many csv files and make one csv file big
+'''
+def csv_file_to_pg(filename_with_path=''):
+    csv_dict = cfg.csv_dict
+    dir_out = gfiletools.get_output_directory()
+    file_csv = str(os.path.join(dir_out, cfg.file_csv))
+    db = PostgresqlDatabase(cfg.database, host=cfg.host, port=None, user=cfg.user, password=cfg.user_password,
+                            autocommit=True, autorollback=True)  # )
+    db.connect()
+
+
+
 
 
 
 def do_multithreading(dir_input=''):
     list_csv = get_list_csv_dir(dir_input)
-    dir_out = get_output_directory()
+    dir_out = gfiletools.get_output_directory()
     # for f in list_csv:
     #     csv_file_to_pg(f)
-     csv_file_to_pg(list_csv[1])
+    csv_file_to_pg(list_csv[1])
     # csv_file_to_pg(list_csv[2])
     # csv_file_to_pg(list_csv[5])
     # csv_file_to_pg(list_csv[6])
@@ -250,26 +180,16 @@ def do_multithreading(dir_input=''):
     # csv_file_to_pg(list_csv[28])
 
 
-def do_log_file():
-    for handler in logging.root.handlers[:]:  # Remove all handlers associated with the root logger object.
-        logging.root.removeHandler(handler)
-    dir_out = get_output_directory()
-    file_log = str(os.path.join(dir_out, cfg.file_log))  # from cfg.file
-    if os.path.isfile(file_log):  # Если выходной LOG файл существует - удаляем его
-        os.remove(file_log)
-    logging.basicConfig(filename=file_log, format='%(asctime)s %(levelname)s %(message)s', level=logging.DEBUG,
-                        filemode='w')  #
-    logging.info(file_log)
-
 
 # ---------------- do main --------------------------------
 def main():
     time1 = datetime.now()
     print('Starting at :' + str(time1))
 
-    dir_input = get_input_directory()
+    dir_input = gfiletools.get_input_directory()
     csv_file_out_create()
-    do_log_file()
+    gfiletools.do_log_file()
+    pg_create_tables()
 
     do_multithreading(dir_input)
 
