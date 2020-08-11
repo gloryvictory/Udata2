@@ -7,7 +7,7 @@
 #   Created         : 03 August 2020
 #   Last Modified	: 03 August 2020
 #   Version		    : 1.0
-#   PIP             : pip install tqdm peewee
+#   PIP             : pip install tqdm peewee psycopg2 psycopg2-binary
 #   RESULT          : csv file with columns: FILENAME;...LASTACCESS
 # Modifications	: 1.1 -
 #               : 1.2 -
@@ -24,6 +24,8 @@ from datetime import datetime
 import csv
 import logging
 from itertools import (takewhile, repeat)
+
+#import psycopg2
 
 #import sys
 # import time
@@ -48,10 +50,13 @@ except Exception as e:
     print("try: pip install peewee")
 
 
-from src import cfg  # some global configurations
-from src import gfiletools  # some global configurations
-#from src import models
-from src.models import Udata
+#from . import cfg  # some global configurations
+#from . import gfiletools  # some global configurations
+import cfg
+import gfiletools
+import models
+
+#from src.models import Udata
 
 
 
@@ -136,16 +141,17 @@ def get_list_csv_dir(dir_input=''):
     PG Create tables
 '''
 def pg_create_tables():
-    # db = SqliteDatabase('zsniigg.db')
-    db = PostgresqlDatabase(cfg.database, host=cfg.host, port=None, user=cfg.user, password=cfg.user_password,
-                            autocommit=True, autorollback=True)  # )
-    # db = PostgresqlDatabase(cfg.database, user=cfg.user, password=cfg.user_password)   # host=cfg.host )
-    # db.autorollback = True
-    db.connect()
-    try:
-        db.create_tables([Udata], safe=True)
-    except peewee.InternalError as px:
-        print(str(px))
+    pass
+    # # db = SqliteDatabase('zsniigg.db')
+    # db = peewee.PostgresqlDatabase(cfg.database, host=cfg.host, port='5432', user=cfg.user, password=cfg.user_password,
+    #                         autocommit=True, autorollback=True)  # )
+    # # db = PostgresqlDatabase(cfg.database, user=cfg.user, password=cfg.user_password)   # host=cfg.host )
+    # # db.autorollback = True
+    # db.connect()
+    # try:
+    #     db.create_tables([models.Udata], safe=True)
+    # except peewee.InternalError as px:
+    #     print(str(px))
 
     # db.drop_tables([Udata])
 
@@ -158,9 +164,10 @@ def csv_file_to_pg(filename_with_path=''):
     csv_dict = cfg.csv_dict
     dir_out = gfiletools.get_output_directory()
     file_csv = str(os.path.join(dir_out, cfg.file_csv))
-    db = PostgresqlDatabase(cfg.database, host=cfg.host, port=None, user=cfg.user, password=cfg.user_password,
-                            autocommit=True, autorollback=True)  # )
-    db.connect()
+    # db = PostgresqlDatabase(cfg.database, host=cfg.host, port=None, user=cfg.user, password=cfg.user_password,
+    #                         autocommit=True, autorollback=True)  # )
+    # db.connect()
+
 
 
 

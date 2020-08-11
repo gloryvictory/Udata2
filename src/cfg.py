@@ -17,7 +17,7 @@ schema = 'udataschema'
 user = 'udatauser2'
 user_password = 'udatauser2pwd'
 database = 'udatadb2'
-# postgresql://udatauser:udatauserpassword@localhost:5432/udatadb
+# postgresql://udatauser2:udatauser2pwd@localhost:5432/udatadb2
 
 csv_delimiter = ';'
 

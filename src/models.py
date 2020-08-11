@@ -1,7 +1,20 @@
-from peewee import *
+from datetime import datetime
+
+# non standard packages
+try:
+    from peewee import *
+except Exception as e:
+    print("Exception occurred " + str(e))
+    print("try: pip install peewee")
+
+import cfg  # some global configurations
 
 # https://github.com/sinscary/Flask-Social-Networking
 # good example of peewee using
+
+db = PostgresqlDatabase(cfg.database, host=cfg.host, port='5432', user=cfg.user, password=cfg.user_password,
+                        autocommit=True, autorollback=True)
+db.connect()
 
 # Model for our entry table
 class Udata(Model):
@@ -28,6 +41,9 @@ class Udata(Model):
 
     class Meta:
         database = db
+        db_table = "UDATA"
         # indexes = (
         #     # create a unique on ...
         #     (('compname'), True),)
+
+        # order_by = ('created_at',)

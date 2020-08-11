@@ -21,9 +21,11 @@ from datetime import datetime
 import csv
 import logging
 from sys import platform as _platform
-from itertools import (takewhile, repeat)
+import sys
+#from itertools import (takewhile, repeat)
 
-from src import cfg
+
+import cfg
 
 
 
