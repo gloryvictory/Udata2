@@ -313,11 +313,12 @@ def do_csv_file_in_dir_out_to_db(filename_with_path=''):
                         else:
 
                             try:
-                                print(file_full_path_name)
+
                                 _UDATA = Udata2()
                                 current_line = str(line).split(cfg.csv_delimiter)
                                 compname = current_line[0].strip("\"")
                                 file_full_path_name = current_line[1].strip("\"")
+                                #print(file_full_path_name)
                                 folder = file_full_path_name
                                 disk = file_full_path_name.split(":")[0]
                                 size = current_line[2].strip("\"")
@@ -335,6 +336,12 @@ def do_csv_file_in_dir_out_to_db(filename_with_path=''):
                                 else:
                                     md5 = str_md5
 
+                                _folder = folder.lower().split(':')[1]
+                                is_profile = False
+                                if _folder.startswith("\\users"):
+                                    is_profile = True
+
+
                                 _UDATA.compname = compname
                                 _UDATA.disk = disk
                                 _UDATA.folder = folder
@@ -345,7 +352,8 @@ def do_csv_file_in_dir_out_to_db(filename_with_path=''):
                                 _UDATA.filename = filename
                                 _UDATA.ext = ext
                                 _UDATA.md5 = md5
-                                _UDATA.save(force_insert=True)
+                                _UDATA.is_profile = is_profile
+                                #_UDATA.save(force_insert=True)
                                 _UDATA.save()
 
 
