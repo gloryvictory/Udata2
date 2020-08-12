@@ -25,17 +25,6 @@ import csv
 import logging
 from itertools import (takewhile, repeat)
 
-#import psycopg2
-
-#import sys
-# import time
-# from time import strftime  # Load just the strftime Module from Time
-#import codecs
-
-
-# non standard packages
-import peewee
-
 try:
     from tqdm import tqdm
 except Exception as e:

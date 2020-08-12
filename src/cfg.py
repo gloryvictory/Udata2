@@ -23,29 +23,23 @@ csv_delimiter = ';'
 
 csv_fieldnames_in = ['compname','FullName','Length','CreationTime', 'ModifiedTime','AccessTime','Name','Extension','MD5']
 
-# csv_dict = {'COMPNAME': '',
-#             'DISK': '',
-#             'FOLDER': '',
-#             'FILENAME_LONG': '',
-#             'FILENAME_SHOT': '',
-#             'EXT_LONG': '',
-#             'EXT_SHOT': '',
-#             'SIZE': '',
-#             'FULLNAME': '',
-#             'DATE': '',
-#             'YEAR': '',
-#             'MONTH': '',
-#             'CREATIONTIME': '',
-#             'FIO': '',
-#             'OTDEL': '',
-#             'TEXTFULL': '',
-#             'TEXTLESS': '',
-#             'LASTUPDATE': ''}
 
-csv_dict = {'FULLNAME': '',
-                'NAME': '',
-                'DISK': '',
-                'CNT': '',
-                'COLUMNS': '',
-                'MAXDELIM': ''
-                }
+csv_dict = {'COMPNAME': '',
+            'DISK': '',
+            'FOLDER': '',
+            'IS_PROFILE': '',
+            'FILENAME_LONG': '',
+            'FILENAME_SHOT': '',
+            'EXT_LONG': '',
+            'EXT_SHOT': '',
+            'SIZE': '',
+            'FULLNAME': '',
+            'DATE': '',
+            'YEAR': '',
+            'MONTH': '',
+            'CREATIONTIME': '',
+            'FIO': '',
+            'OTDEL': '',
+            'TEXTFULL': '',
+            'TEXTLESS': '',
+            'LASTUPDATE': ''}
