@@ -321,6 +321,10 @@ def do_csv_file_in_dir_out_to_db(filename_with_path=''):
                                 #print(file_full_path_name)
                                 folder = file_full_path_name
                                 disk = file_full_path_name.split(":")[0]
+                                #_UDATA.get(_UDATA.username == 'Charlie')
+                                # qq = _UDATA.select().where(
+                                #     (_UDATA.compname == compname) and (_UDATA.disk == disk)).count()
+
                                 size = current_line[2].strip("\"")
                                 ctime = current_line[3].strip()
                                 mtime = current_line[4].strip()
@@ -329,9 +333,9 @@ def do_csv_file_in_dir_out_to_db(filename_with_path=''):
                                 filename = current_line[6].strip()
                                 str_ext = current_line[7].strip()
                                 ext = str_ext.replace(".", "")
-                                str_md5  = current_line[8].strip()
+                                str_md5  = current_line[8].strip().lower()
                                 md5 = ''
-                                if str_md5.find('noMD5') > -1 :
+                                if str_md5.find('nomd5') > -1:
                                     md5 = ''
                                 else:
                                     md5 = str_md5
@@ -424,22 +428,30 @@ def do_csv_file_in_dir_out_to_db(filename_with_path=''):
 ##let try multithreading
 def do_multithreading(dir_input=''):
     list_csv = get_list_csv_dir(dir_input)
-    do_csv_file_in_dir_out_to_db(list_csv[0])
-    # do_csv_file_in_dir_out_to_db(list_csv[1])
-    # do_csv_file_in_dir_out_to_db(list_csv[10])
-    # do_csv_file_in_dir_out_to_db(list_csv[11])
+    # do_csv_file_in_dir_out_to_db(list_csv[0])
+    # # do_csv_file_in_dir_out_to_db(list_csv[1])
+    # # do_csv_file_in_dir_out_to_db(list_csv[10])
+    # # do_csv_file_in_dir_out_to_db(list_csv[11])
+    ll = []
+    ll.append(list_csv[0])
+    ll.append(list_csv[1])
+    ll.append(list_csv[2])
+    ll.append(list_csv[3])
+    ll.append(list_csv[4])
 
-    # try:
-    #     from multiprocessing import Pool
-    # except Exception as e:
-    #     print("Exception occurred do_multithreading" + str(e))
-    #
-    # try:
-    #     # кол-во потоков
-    #     with Pool(10) as p:
-    #          p.map(do_csv_file_in_dir_out_to_db, list_csv)
-    # except Exception as e:
-    #     print("Exception occurred do_multithreading" + str(e))
+
+    try:
+        from multiprocessing import Pool
+    except Exception as e:
+        print("Exception occurred do_multithreading" + str(e))
+
+    try:
+        # кол-во потоков
+        with Pool(2) as p:
+             #p.map(do_csv_file_in_dir_out_to_db, list_csv)
+             p.map(do_csv_file_in_dir_out_to_db, ll)
+    except Exception as e:
+        print("Exception occurred do_multithreading" + str(e))
 
     # #map(save_file_html_by_url, url_list)
 
