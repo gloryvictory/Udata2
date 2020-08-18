@@ -4,15 +4,15 @@ from time import strftime   # Load just the strftime Module from Time
 file_csv = str(strftime("%Y-%m-%d") + "01_csv_to_pg" + ".csv")
 file_log = str(strftime("%Y-%m-%d") + "01_csv_to_pg" + ".log")
 
-folder_in_win = 'Z:\\'
+folder_in_win = 'E:\\Temp\\csv_test'
 #folder_win_in = 'E:\\Temp\\geodex_test'
 folder_in_linux = '/Users/glory/projects/CSV_ALL'
 
-folder_out_win = 'E:\\TEMP\\info.doc\\'
+folder_out_win = 'E:\\TEMP\\csv_test'
 folder_out_linux = '/Users/glory/projects/out'
 
 
-host = 'localhost'
+host = '10.57.10.45'
 schema = 'udataschema'
 user = 'udatauser2'
 user_password = 'udatauser2pwd'

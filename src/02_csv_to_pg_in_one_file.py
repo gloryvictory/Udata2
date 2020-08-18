@@ -13,10 +13,10 @@
 #               : 1.2 -
 #
 # Description   : This script will search some *.csv files in the given directory and makes CSV file with some information
-# create database udatadb;
-# create user udatauser with encrypted password 'secret_password';
-# grant all privileges on database udatadb to udatauser;
-# CREATE SCHEMA IF NOT EXISTS udataschema  AUTHORIZATION udatauser;
+# create database udatadb2;
+# create user udatauser2 with encrypted password 'secret_password';
+# grant all privileges on database udatadb2 to udatauser2;
+# CREATE SCHEMA IF NOT EXISTS udataschema2  AUTHORIZATION udatauser2;
 # CREATE EXTENSION postgis;
 
 import os  # Load the Library Module
@@ -33,6 +33,7 @@ from itertools import (takewhile, repeat)
 
 from peewee import *
 from tqdm import tqdm
+from tqdm import trange
 
 # non standard packages
 
@@ -97,7 +98,7 @@ def get_output_directory():
         if os.path.exists(dir_out) and os.path.isdir(dir_out):
             return dir_out
     if _platform == "win32" or _platform == "win64":  # Windows or Windows 64-bit
-        dir_out = cfg.folder_win_out
+        dir_out = cfg.folder_out_win
         #print('Output directory from config file' + dir_out)
         if os.path.exists(dir_out) and os.path.isdir(dir_out):
             return dir_out
@@ -432,12 +433,15 @@ def do_multithreading(dir_input=''):
     # # do_csv_file_in_dir_out_to_db(list_csv[1])
     # # do_csv_file_in_dir_out_to_db(list_csv[10])
     # # do_csv_file_in_dir_out_to_db(list_csv[11])
-    ll = []
-    ll.append(list_csv[0])
-    ll.append(list_csv[1])
-    ll.append(list_csv[2])
-    ll.append(list_csv[3])
-    ll.append(list_csv[4])
+    # ll = []
+    # ll.append(list_csv[0])
+    # ll.append(list_csv[1])
+    # ll.append(list_csv[2])
+    # ll.append(list_csv[3])
+    # ll.append(list_csv[4])
+
+    # for i in trange(len(list_csv), file=sys.stdout, leave=False, unit_scale=True, desc='File '):
+    #     do_csv_file_in_dir_out_to_db(list_csv[i])
 
 
     try:
@@ -449,7 +453,7 @@ def do_multithreading(dir_input=''):
         # кол-во потоков
         with Pool(2) as p:
              #p.map(do_csv_file_in_dir_out_to_db, list_csv)
-             p.map(do_csv_file_in_dir_out_to_db, ll)
+             p.map(do_csv_file_in_dir_out_to_db, list_csv)
     except Exception as e:
         print("Exception occurred do_multithreading" + str(e))
 
