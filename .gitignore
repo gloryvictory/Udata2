@@ -5,3 +5,5 @@ conf.py
 cfg.py
 .idea/*
 venv/*
+src/__pycache__/
+#src/sql/ext_data.csv
