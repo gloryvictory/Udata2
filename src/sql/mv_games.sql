@@ -15,3 +15,11 @@ WITH DATA;
 
 ALTER TABLE mv_games
     OWNER TO udatauser2;
+
+
+CREATE OR REPLACE VIEW v_games AS
+select
+    mv_games.compname,
+	mv_games.folder,
+	mv_games.ext
+from mv_games

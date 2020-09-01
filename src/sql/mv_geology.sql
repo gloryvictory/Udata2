@@ -19,3 +19,12 @@ WITH DATA;
 
 ALTER TABLE public.mv_geology
     OWNER TO udatauser2;
+
+CREATE OR REPLACE VIEW v_geology AS
+select
+    mv_geology.compname,
+	mv_geology.ext,
+	mv_geology.count,
+	mv_geology.size_sum,
+	mv_geology.size_pretty
+from mv_geology

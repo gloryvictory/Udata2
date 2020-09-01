@@ -19,3 +19,16 @@ WITH DATA;
 
 ALTER TABLE public.mv_geography
     OWNER TO udatauser2;
+
+
+CREATE OR REPLACE VIEW public.v_geography AS
+ SELECT mv_geography.compname,
+    mv_geography.ext,
+    mv_geography.count,
+    mv_geography.size_sum,
+    mv_geography.size_pretty
+   FROM mv_geography;
+
+ALTER TABLE public.v_geography
+    OWNER TO udatauser2;
+

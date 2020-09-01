@@ -18,3 +18,15 @@ WITH DATA;
 
 ALTER TABLE mv_all_projects
     OWNER TO udatauser2;
+
+
+CREATE OR REPLACE VIEW v_all_projects AS
+select
+    ext.description,
+    mv_all_projects.ext,
+    mv_all_projects.count,
+    mv_all_projects.size_sum,
+    mv_all_projects.size_pretty
+from mv_all_projects, ext
+where mv_all_projects.ext=ext.ext
+
